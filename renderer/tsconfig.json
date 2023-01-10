@@ -1,5 +1,6 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "renderder", "pages/firebase.js", "nextron.config.js"],
   "exclude": ["node_modules"],
+
 }

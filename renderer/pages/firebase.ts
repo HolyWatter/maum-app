@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAj55uz70Ct7gaVgxCeBXBCAPoJBh2-F_s",
@@ -7,8 +7,9 @@ const firebaseConfig = {
   projectId: "maum-app",
   storageBucket: "maum-app.appspot.com",
   messagingSenderId: "1013547505953",
-  appId: "1:1013547505953:web:81c703abb8ae8fd2250660"
+  appId: "1:1013547505953:web:81c703abb8ae8fd2250660",
 };
 
-// Initialize Firebase
-export default initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
