@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { loginState } from "../state/atom";
+import { loginState } from "../state/Atom";
 import { useRecoilValue } from "recoil";
 
 function Home() {
