@@ -19,7 +19,6 @@ export default function AuthForm({
       ...userInfo,
       [name]: value,
     });
-    console.log(userInfo);
   };
   return (
     <form onSubmit={onSubmitForm} className="flex flex-col space-y-5">
