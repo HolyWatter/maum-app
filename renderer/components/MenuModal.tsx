@@ -14,7 +14,7 @@ export default function MenuModal() {
     router.push("/home");
     alert("정상적으로 로그아웃 되었습니다.")
   };
-  console.log(router.pathname)
+  
   return (
     <div className="absolute w-[120px] p-2 right-0 bg-white border rounded-md space-y-3">
       <button className="flex items-center space-x-4">
