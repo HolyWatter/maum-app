@@ -4,16 +4,12 @@ import AuthForm from "../component/AuthForm";
 import { auth } from "./firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserInfo } from "./interface";
-
-interface Token {
-  response : {
-    user : {
-      accessToken : string;
-    }
-  }
-}
+import { loginState, userLocalId } from "../state/atom";
+import { useSetRecoilState } from "recoil";
 
 export default function login() {
+  const setLoginStatus = useSetRecoilState(loginState)
+  const setUserLocalId = useSetRecoilState(userLocalId)
   const [userInfo, setUserInfo] = useState<UserInfo>({
     email: "",
     password: "",
@@ -29,6 +25,8 @@ export default function login() {
     router.push("/signup");
   };
 
+  
+
   async function submitLoginForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
@@ -38,9 +36,12 @@ export default function login() {
         userInfo.password
       );
       localStorage.setItem("token", (response.user as any).accessToken);
+      setLoginStatus(true);
+      setUserLocalId((response as any)._tokenResponse.localId)
       router.push("/home");
       alert("로그인 되었습니다.");
     } catch (error) {
+      console.log(error)
       alert(ERROR_MESSAGE[error.code]);
     }
   }
