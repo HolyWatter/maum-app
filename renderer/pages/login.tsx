@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import AuthForm from "../component/AuthForm";
+import AuthForm from "../components/AuthForm";
 import { auth } from "./firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserInfo } from "./interface";
-import { loginState, userLocalId } from "../state/atom";
+import { loginState, userLocalId } from "../state/Atom";
 import { useSetRecoilState } from "recoil";
 
 export default function login() {

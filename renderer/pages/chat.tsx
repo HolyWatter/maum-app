@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "./firebase";
 import { useRecoilValue } from "recoil";
-import { userLocalId } from "../state/atom";
+import { userLocalId } from "../state/Atom";
 
 export default function Chat() {
   const [text, setText] = useState<string>("");

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import AuthForm from "../component/AuthForm";
+import AuthForm from "../components/AuthForm";
 import { UserInfo } from "./interface";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
