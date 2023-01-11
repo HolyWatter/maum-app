@@ -1,15 +1,16 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import AuthForm from "../components/AuthForm";
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserInfo } from "./interface";
 import { loginState, userLocalId } from "../state/Atom";
 import { useSetRecoilState } from "recoil";
+import { addDoc, collection } from "firebase/firestore";
 
 export default function login() {
-  const setLoginStatus = useSetRecoilState(loginState)
-  const setUserLocalId = useSetRecoilState(userLocalId)
+  const setLoginStatus = useSetRecoilState(loginState);
+  const setUserLocalId = useSetRecoilState(userLocalId);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     email: "",
     password: "",
@@ -25,8 +26,6 @@ export default function login() {
     router.push("/signup");
   };
 
-  
-
   async function submitLoginForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
@@ -37,17 +36,16 @@ export default function login() {
       );
       localStorage.setItem("token", (response.user as any).accessToken);
       setLoginStatus(true);
-      setUserLocalId((response as any)._tokenResponse.localId)
+      setUserLocalId((response as any)._tokenResponse.localId);
       router.push("/home");
       alert("로그인 되었습니다.");
     } catch (error) {
-      console.log(error)
+      console.log(error);
       alert(ERROR_MESSAGE[error.code]);
     }
   }
   return (
     <div className="flex flex-col items-center space-y-10">
-      <button onClick={toMain}>메인으로</button>
       <div className="mt-[100px] font-bold text-origin text-[100px]">Maum</div>
       <p className="text-gray-500">서비스를 이용하기 위해 로그인해주세요 </p>
       <AuthForm

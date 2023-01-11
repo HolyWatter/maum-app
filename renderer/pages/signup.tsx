@@ -3,7 +3,8 @@ import { useState } from "react";
 import AuthForm from "../components/AuthForm";
 import { UserInfo } from "./interface";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 export default function signup() {
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -29,7 +30,11 @@ export default function signup() {
         userInfo.email,
         userInfo.password
       );
+      await addDoc(collection(db, "userList"), {
+        email: userInfo.email,
+      });
       alert("회원가입되었습니다.");
+      router.push("/login");
     } catch (error) {
       console.log(error.code);
       alert(ERROR_MESSAGE[error.code]);
@@ -37,7 +42,6 @@ export default function signup() {
   }
   return (
     <div className="flex flex-col items-center space-y-10">
-      <button onClick={toMain}>메인으로</button>
       <div className="mt-[100px] font-bold text-origin text-[100px]">Maum</div>
       <p className="text-gray-500">서비스를 이용하기 위해 회원가입해주세요</p>
       <AuthForm
@@ -47,9 +51,9 @@ export default function signup() {
         onSubmitForm={submitSignUpForm}
       />
       <div className="flex space-x-5">
-        <p>아직 회원이 아니신가요?</p>
+        <p>이미 회원이신가요??</p>
         <button onClick={toLogin} className="text-blue-600 underline">
-          회원가입
+          로그인
         </button>
       </div>
     </div>

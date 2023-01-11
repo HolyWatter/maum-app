@@ -14,6 +14,9 @@ function Home() {
   const toChat = () => {
     router.push("/chat");
   };
+  const toUserList = () => {
+    router.push("/userlist");
+  };
 
 
   return (
@@ -25,6 +28,8 @@ function Home() {
         </button>
         <button onClick={toSignUp}>회원가입페이지로</button>
         <button onClick={toChat}>채팅앱</button>
+        <button onClick={toUserList}>유저목록</button>
+
       </div>
     </>
   );
