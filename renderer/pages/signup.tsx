@@ -25,18 +25,19 @@ export default function signup() {
   async function submitSignUpForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(
+      const response = await createUserWithEmailAndPassword(
         auth,
         userInfo.email,
         userInfo.password
       );
+      console.log(response)
       await addDoc(collection(db, "userList"), {
         email: userInfo.email,
+        uid: (response as any)._tokenResponse.localId
       });
       alert("회원가입되었습니다.");
       router.push("/login");
     } catch (error) {
-      console.log(error.code);
       alert(ERROR_MESSAGE[error.code]);
     }
   }
