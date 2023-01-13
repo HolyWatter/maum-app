@@ -23,7 +23,7 @@ export default function Nav() {
     setIsMenuModal((prev) => !prev);
   };
   return (
-    <div className="min-w-[300px] p-2 bg-gray-200 flex justify-between">
+    <div className="fixed w-full min-w-[300px] h-[50px] p-2 bg-gray-200 flex justify-between">
       <p onClick={clickLogo} className="text-origin text-xl font-bold">Maum</p>
       {isLogin ? (
         <div>
@@ -43,7 +43,7 @@ export default function Nav() {
               />
             </svg>
           </button>
-          {isMenuModal && <MenuModal />}
+          {isMenuModal && <MenuModal setIsMenuModal={setIsMenuModal} />}
         </div>
       ) : (
         <div className="space-x-3">

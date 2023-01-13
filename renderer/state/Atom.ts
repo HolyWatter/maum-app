@@ -5,6 +5,11 @@ export const userLocalId = atom({
   default : ""
 })
 
+export const loginEmail = atom({
+  key : "loginEmail",
+  default : ""
+})
+
 export const loginState = atom({
   key : "loginState",
   default : false

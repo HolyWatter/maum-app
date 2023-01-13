@@ -7,28 +7,29 @@ import {
   query,
   doc,
   setDoc,
+  updateDoc
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { userLocalId } from "../state/Atom";
+import { userLocalId, loginEmail } from "../state/Atom";
 import { db } from "./firebase";
 
-interface ClickUserInfo {
+interface Users {
   email: string;
   uid: string;
 }
 
 export default function UserList() {
   const localId = useRecoilValue(userLocalId);
-  const [userList, setUserList] = useState([]);
+  const email = useRecoilValue(loginEmail)
+  const [userList, setUserList] = useState<Users[]>([]);
   const [userModal, setUserModal] = useState<boolean>(false);
-  const [clickedUserInfo, setClickedUserInfo] = useState<ClickUserInfo>({
+  const [clickedUserInfo, setClickedUserInfo] = useState<Users>({
     email: "",
     uid: "",
   });
   const router = useRouter();
-
   useEffect(() => {
     if (localId === "") {
       router.push("/login");
@@ -39,18 +40,20 @@ export default function UserList() {
       const user = snapshot.docs.map((doc) => ({
         ...doc.data(),
       }));
-      setUserList(user);
+      setUserList(user as any);
     });
   }, []);
 
-  const clickUser = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const clickUser = (
+    uid: string,
+    email: string
+  ) => {
     setUserModal((prev) => !prev);
     setClickedUserInfo({
-      email: e.currentTarget.name,
-      uid: e.currentTarget.value,
+      uid: uid,
+      email: email,
     });
   };
-
   const clickClose = () => {
     setUserModal((prev) => !prev);
   };
@@ -58,12 +61,25 @@ export default function UserList() {
   const clickChatWithUser = async () => {
     const combinedUid =
       localId > clickedUserInfo.uid
-        ? localId + clickedUserInfo.uid
-        : clickedUserInfo.uid + localId;
+        ? clickedUserInfo.uid + localId
+        : localId + clickedUserInfo.uid
+        
     try {
       const response = await getDoc(doc(db, "chats", combinedUid));
       if (!response.exists()) {
         await setDoc(doc(db, "chats", combinedUid), { messages: [] });
+        await updateDoc(doc(db, "chatRooms", localId), {
+          [combinedUid + ".userInfo"]: {
+            email: clickedUserInfo.email,
+            uid: clickedUserInfo.uid,
+          },
+        });
+        await updateDoc(doc(db, "chatRooms", clickedUserInfo.uid), {
+          [combinedUid + ".userInfo"]: {
+            email,
+            uid: localId,
+          },
+        });
       }
       router.push(`/chatroom/${combinedUid}`);
     } catch {}
@@ -76,9 +92,9 @@ export default function UserList() {
           <button
             key={user.uid}
             className="flex items-center p-3 border-b space-x-3"
-            name={user.email}
-            value={user.uid}
-            onClick={clickUser}
+            onClick={()=>{
+              clickUser(user.uid, user.email)
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

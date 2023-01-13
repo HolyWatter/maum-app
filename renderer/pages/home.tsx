@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { loginState } from "../state/Atom";
-import { useRecoilValue } from "recoil";
 import GroupModal from "../components/GroupModal";
 
 function Home() {
@@ -32,7 +30,8 @@ function Home() {
         </button>
         <button onClick={toSignUp}>회원가입페이지로</button>
         <button onClick={toUserList}>유저목록</button>
-        <button onClick={createGroupChat}>단체채팅생성</button>        
+        <button onClick={createGroupChat}>단체채팅생성</button>
+        <button onClick={()=> {router.push("/chatroom")}}>챗앱</button>   
       </div>
       {isGroupModal && <GroupModal />}
     </div>
