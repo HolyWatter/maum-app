@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
 import { loginState, userLocalId } from "../state/Atom";
 
-export default function MenuModal() {
+export default function MenuModal({setIsMenuModal}) {
   const router = useRouter();
   const setIsLogin = useSetRecoilState(loginState);
   const setUserId = useSetRecoilState(userLocalId);
@@ -13,6 +13,7 @@ export default function MenuModal() {
     localStorage.removeItem('token');
     router.push("/home");
     alert("정상적으로 로그아웃 되었습니다.")
+    setIsMenuModal(false)
   };
   
   return (

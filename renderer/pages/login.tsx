@@ -4,13 +4,14 @@ import AuthForm from "../components/AuthForm";
 import { auth, db } from "./firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserInfo } from "./interface";
-import { loginState, userLocalId } from "../state/Atom";
+import { loginEmail, loginState, userLocalId } from "../state/Atom";
 import { useSetRecoilState } from "recoil";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function login() {
   const setLoginStatus = useSetRecoilState(loginState);
   const setUserLocalId = useSetRecoilState(userLocalId);
+  const setLoginEmail = useSetRecoilState(loginEmail)
   const [userInfo, setUserInfo] = useState<UserInfo>({
     email: "",
     password: "",
@@ -36,11 +37,11 @@ export default function login() {
       );
       localStorage.setItem("token", (response.user as any).accessToken);
       setLoginStatus(true);
-      setUserLocalId((response as any)._tokenResponse.localId);
+      setUserLocalId(response.user.uid)
+      setLoginEmail(response.user.email)
       router.push("/home");
       alert("로그인 되었습니다.");
     } catch (error) {
-      console.log(error);
       alert(ERROR_MESSAGE[error.code]);
     }
   }

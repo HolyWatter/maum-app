@@ -8,7 +8,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <Nav />
-      <Component {...pageProps} />
+      <div className="pt-[50px] h-screen">
+        <Component {...pageProps} />
+      </div>
     </RecoilRoot>
   );
 }

@@ -7,16 +7,29 @@ import {
   collection,
   orderBy,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { userLocalId } from "../state/Atom";
+import { loginEmail, userLocalId } from "../state/Atom";
 import { useRecoilValue } from "recoil";
+
+interface User {
+  email: string;
+  uid: string;
+}
 
 export default function GroupModal() {
   const localId = useRecoilValue(userLocalId);
+  const email = useRecoilValue(loginEmail);
   const [userList, setUserList] = useState([]);
-  const [inviteUserList, setInviteUserList] = useState<string[]>([localId]);
+  const [checkedArr, setCheckedArr] = useState<string[]>([]);
+  const [inviteUserList, setInviteUserList] = useState<User[]>([
+    {
+      uid: localId,
+      email,
+    },
+  ]);
   const router = useRouter();
 
   const getUserList = async () => {
@@ -33,35 +46,48 @@ export default function GroupModal() {
   }, []);
 
   const selectUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     if (e.target.checked) {
-      setInviteUserList([...inviteUserList, e.target.value]);
+      setCheckedArr([...checkedArr, e.target.value]);
+      setInviteUserList([
+        ...inviteUserList,
+        {
+          email: e.target.name,
+          uid: e.target.value,
+        },
+      ]);
     } else {
+      setCheckedArr(checkedArr.filter(item=> e.target.value !==item))
       setInviteUserList(
-        inviteUserList.filter((item) => e.target.value != item)
+        inviteUserList.filter((item) => e.target.value !== item.uid)
       );
     }
   };
-  console.log(inviteUserList);
   const clickCreateRoom = async () => {
-    const combinedUid = inviteUserList.sort().join("");
+    const combinedUid = inviteUserList.map(item => item.uid).sort().join("");
     const response = await getDoc(doc(db, "chats", combinedUid));
     if (!response.exists()) {
       await setDoc(doc(db, "chats", combinedUid), { messages: [] });
+      inviteUserList.forEach(function async (item) {
+        updateDoc(doc(db, "chatRooms" , item.uid) ,{
+          [combinedUid + ".userInfo"] : inviteUserList
+        })
+      })
     }
     router.push(`/chatroom/${combinedUid}`);
   };
 
+  const clickClose = () => {};
   return (
     <div className="space-y-2">
       {userList.map((item) =>
         item.uid !== localId ? (
           <label key={item.uid} className="flex items-center space-x-2">
             <input
+            checked={checkedArr.includes(item.uid)}
               className="hidden"
-              checked={inviteUserList.includes(item.uid)}
               onChange={selectUser}
               type="checkbox"
+              name={item.email}
               value={item.uid}
             />
             <svg
@@ -81,12 +107,12 @@ export default function GroupModal() {
             <p>{item.email}</p>
             <div
               className={
-                inviteUserList.includes(item.uid)
+                checkedArr.includes(item.uid)
                   ? "w-3 h-3 rounded-full bg-origin"
                   : "w-3 h-3 border rounded-full"
               }
             >
-              {inviteUserList.includes(item.uid) && (
+              {checkedArr.includes(item.uid) && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

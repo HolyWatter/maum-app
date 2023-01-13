@@ -1,16 +1,15 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import AuthForm from "../components/AuthForm";
-import { UserSignUpInfo } from "./interface";
+import { UserInfo } from "./interface";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc } from "firebase/firestore";
 
 export default function signup() {
-  const [userInfo, setUserInfo] = useState<UserSignUpInfo>({
+  const [userInfo, setUserInfo] = useState<UserInfo>({
     email: "",
     password: "",
-    name : "",
   });
 
   const router = useRouter();
@@ -29,25 +28,18 @@ export default function signup() {
       const response = await createUserWithEmailAndPassword(
         auth,
         userInfo.email,
-        userInfo.password
+        userInfo.password,
       );
-      console.log(response)
       await addDoc(collection(db, "userList"), {
         email: userInfo.email,
-        uid: (response as any)._tokenResponse.localId,
-        name : userInfo.name
+        uid: response.user.uid,
       });
+      await setDoc(doc(db, "chatRooms", response.user.uid) , {})
       alert("회원가입되었습니다.");
       router.push("/login");
     } catch (error) {
       alert(ERROR_MESSAGE[error.code]);
     }
-  }
-  const handleInputName = (e : React.ChangeEvent<HTMLInputElement>) =>{
-    setUserInfo({
-      ...userInfo,
-      name : e.target.value
-    })
   }
 
   return (
@@ -55,13 +47,6 @@ export default function signup() {
       <div className="mt-[100px] font-bold text-origin text-[100px]">Maum</div>
       <p className="text-gray-500">서비스를 이용하기 위해 회원가입해주세요</p>
       <div>
-      <input
-        className="w-96 h-10 pl-3 border border-grey rounded-md focus:outline-origin mb-5"
-        placeholder="이름을 입력해주세요."
-        onChange={handleInputName}
-        type="text"
-        value={userInfo.name}
-      />
       <AuthForm
         userInfo={userInfo}
         setUserInfo={setUserInfo}
