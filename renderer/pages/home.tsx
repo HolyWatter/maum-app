@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { loginState } from "../state/Atom";
 import { useRecoilValue } from "recoil";
+import GroupModal from "../components/GroupModal";
 
 function Home() {
   const router = useRouter();
+  const [isGroupModal, setIsGroupModal] = useState<boolean>(false);
   const toLogin = () => {
     router.push("/login");
   };
@@ -17,7 +19,9 @@ function Home() {
   const toUserList = () => {
     router.push("/userlist");
   };
-
+  const createGroupChat = () =>{
+    setIsGroupModal((prev) => !prev)
+  }
 
   return (
     <div>
@@ -28,8 +32,9 @@ function Home() {
         </button>
         <button onClick={toSignUp}>회원가입페이지로</button>
         <button onClick={toUserList}>유저목록</button>
-        <button onClick={()=> router.push('/chatroom/1')}>채팅룸</button>
+        <button onClick={createGroupChat}>단체채팅생성</button>        
       </div>
+      {isGroupModal && <GroupModal />}
     </div>
   );
 }
