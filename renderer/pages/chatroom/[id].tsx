@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../firebase";
 import { useRecoilValue } from "recoil";
@@ -10,7 +10,7 @@ export default function Chat() {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState(null);
   const localId = useRecoilValue(userLocalId);
-  const email = useRecoilValue(loginEmail)
+  const email = useRecoilValue(loginEmail);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function Chat() {
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };
-  async function addMessage(e: React.FormEvent<HTMLFormElement>) {
+  const addMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const date = new Date();
     const chatPath = router.query.id.toString();
@@ -45,7 +45,7 @@ export default function Chat() {
       });
       setText("");
     } else return;
-  }
+  };
   return (
     <div className="flex h-full">
       <ChatRoomList />
@@ -66,16 +66,13 @@ export default function Chat() {
                     </p>
                   </div>
                 ) : (
-                  <div
-                    key={items.id}
-                    className="space-y-1"
-                  >
+                  <div key={items.id} className="space-y-1">
                     <p className="text-xs text-gray-900">{items.email}</p>
                     <div className="flex items-center justify-start space-x-3">
-                    <p className="max-w-[200px] px-3 bg-gray-500 rounded-md text-white font-light">
-                      {items.text}
-                    </p>
-                    <p className="text-[7px]">{items.created}</p>
+                      <p className="max-w-[200px] px-3 bg-gray-500 rounded-md text-white font-light">
+                        {items.text}
+                      </p>
+                      <p className="text-[7px]">{items.created}</p>
                     </div>
                   </div>
                 )

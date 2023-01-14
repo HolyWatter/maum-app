@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import AuthForm from "../components/AuthForm";
-import { UserInfo } from "./interface";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "./firebase";
 import { addDoc, collection, setDoc, doc } from "firebase/firestore";
+import { UserInfo } from "./interface";
 
 export default function signup() {
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -14,15 +14,11 @@ export default function signup() {
 
   const router = useRouter();
 
-  const toMain = () => {
-    router.push("/home");
-  };
-
   const toLogin = () => {
     router.push("/login");
   };
 
-  async function submitSignUpForm(e: React.FormEvent<HTMLFormElement>) {
+   const submitSignUpForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await createUserWithEmailAndPassword(

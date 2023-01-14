@@ -1,12 +1,11 @@
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import AuthForm from "../components/AuthForm";
-import { auth, db } from "./firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { UserInfo } from "./interface";
+import { auth, db } from "./firebase";
 import { loginEmail, loginState, userLocalId } from "../state/Atom";
 import { useSetRecoilState } from "recoil";
-import { doc, getDoc } from "firebase/firestore";
+import { UserInfo } from "./interface";
 
 export default function login() {
   const setLoginStatus = useSetRecoilState(loginState);
@@ -27,7 +26,7 @@ export default function login() {
     router.push("/signup");
   };
 
-  async function submitLoginForm(e: React.FormEvent<HTMLFormElement>) {
+  const submitLoginForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await signInWithEmailAndPassword(

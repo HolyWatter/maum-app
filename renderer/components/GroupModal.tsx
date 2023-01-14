@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { db } from "../pages/firebase";
 import {
   doc,
@@ -9,22 +11,16 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { loginEmail, userLocalId } from "../state/Atom";
 import { useRecoilValue } from "recoil";
-
-interface User {
-  email: string;
-  uid: string;
-}
+import { LocalUser } from "../pages/interface";
 
 export default function GroupModal({setIsGroupModal}) {
   const localId = useRecoilValue(userLocalId);
   const email = useRecoilValue(loginEmail);
   const [userList, setUserList] = useState([]);
   const [checkedArr, setCheckedArr] = useState<string[]>([]);
-  const [inviteUserList, setInviteUserList] = useState<User[]>([
+  const [inviteUserList, setInviteUserList] = useState<LocalUser[]>([
     {
       uid: localId,
       email,

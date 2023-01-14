@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../state/Atom";
 import MenuModal from "./MenuModal";

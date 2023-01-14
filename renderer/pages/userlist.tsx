@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import {
   collection,
   getDoc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -9,29 +10,24 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { db } from "./firebase";
 import { useRecoilValue } from "recoil";
 import { userLocalId, loginEmail } from "../state/Atom";
-import { db } from "./firebase";
-
-interface Users {
-  email: string;
-  uid: string;
-}
+import { LocalUser } from "./interface";
 
 export default function UserList() {
   const localId = useRecoilValue(userLocalId);
   const email = useRecoilValue(loginEmail);
-  const [userList, setUserList] = useState<Users[]>([]);
+  const [userList, setUserList] = useState<LocalUser[]>([]);
   const [userModal, setUserModal] = useState<boolean>(false);
-  const [clickedUserInfo, setClickedUserInfo] = useState<Users>({
+  const [clickedUserInfo, setClickedUserInfo] = useState<LocalUser>({
     email: "",
     uid: "",
   });
+
   const router = useRouter();
   useEffect(() => {
-    if (localId === "") {
+     if (localId === "") {
       router.push("/login");
       alert("로그인이 필요한 서비스입니다.");
     }

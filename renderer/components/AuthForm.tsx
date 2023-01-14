@@ -1,18 +1,9 @@
-import { UserInfo } from "../pages/interface";
-
-interface Props {
-  setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;
-  userInfo: UserInfo;
-  buttonText: string;
-  onSubmitForm: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-}
-
 export default function AuthForm({
   setUserInfo,
   userInfo,
   buttonText,
   onSubmitForm,
-}: Props) {
+}) {
   const handleUserInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInfo({
@@ -38,7 +29,9 @@ export default function AuthForm({
         name="password"
         value={userInfo.password}
       />
-      <button className="w-96 h-10 rounded-md bg-origin text-white">{buttonText}</button>
+      <button className="w-96 h-10 rounded-md bg-origin text-white">
+        {buttonText}
+      </button>
     </form>
   );
 }
