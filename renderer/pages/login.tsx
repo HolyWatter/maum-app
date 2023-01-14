@@ -1,12 +1,11 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import AuthForm from "../components/AuthForm";
-import { auth, db } from "./firebase";
+import { auth } from "../components/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { UserInfo } from "./interface";
-import { loginEmail, loginState, userLocalId } from "../state/Atom";
+import { UserInfo } from "../components/interface";
+import { loginEmail, loginState, userLocalId } from "../components/state/Atom";
 import { useSetRecoilState } from "recoil";
-import { doc, getDoc } from "firebase/firestore";
 
 export default function login() {
   const setLoginStatus = useSetRecoilState(loginState);

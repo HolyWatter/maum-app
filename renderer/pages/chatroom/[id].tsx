@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../components/firebase";
 import { useRecoilValue } from "recoil";
-import { loginEmail, userLocalId } from "../../state/Atom";
+import { loginEmail, userLocalId } from "../../components/state/Atom";
 import ChatRoomList from "../../components/ChatRoomList";
 
 export default function Chat() {
