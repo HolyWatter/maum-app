@@ -2,8 +2,8 @@ import { getDoc, doc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { db } from "../pages/firebase";
-import { userLocalId } from "../state/Atom";
+import { db } from "../components/firebase";
+import { userLocalId } from "./state/Atom";
 
 export default function ChatRoomList() {
   const localId = useRecoilValue(userLocalId);
