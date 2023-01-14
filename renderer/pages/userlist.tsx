@@ -7,7 +7,7 @@ import {
   query,
   doc,
   setDoc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ interface Users {
 
 export default function UserList() {
   const localId = useRecoilValue(userLocalId);
-  const email = useRecoilValue(loginEmail)
+  const email = useRecoilValue(loginEmail);
   const [userList, setUserList] = useState<Users[]>([]);
   const [userModal, setUserModal] = useState<boolean>(false);
   const [clickedUserInfo, setClickedUserInfo] = useState<Users>({
@@ -44,10 +44,7 @@ export default function UserList() {
     });
   }, []);
 
-  const clickUser = (
-    uid: string,
-    email: string
-  ) => {
+  const clickUser = (uid: string, email: string) => {
     setUserModal((prev) => !prev);
     setClickedUserInfo({
       uid: uid,
@@ -62,8 +59,8 @@ export default function UserList() {
     const combinedUid =
       localId > clickedUserInfo.uid
         ? clickedUserInfo.uid + localId
-        : localId + clickedUserInfo.uid
-        
+        : localId + clickedUserInfo.uid;
+
     try {
       const response = await getDoc(doc(db, "chats", combinedUid));
       if (!response.exists()) {
@@ -86,14 +83,18 @@ export default function UserList() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col min-w-[300px]">
+      <div className="py-2 border-b text-center">
+        <p className="text-lg">maum app에 가입된 유저목록입니다</p>
+        <p className="text-xs text-gray-400">유저를 클릭하면 대화를 시작할 수 있습니다.</p>
+      </div>
       {userList.map((user) =>
         user.uid !== localId ? (
           <button
             key={user.uid}
             className="flex items-center p-3 border-b space-x-3"
-            onClick={()=>{
-              clickUser(user.uid, user.email)
+            onClick={() => {
+              clickUser(user.uid, user.email);
             }}
           >
             <svg
