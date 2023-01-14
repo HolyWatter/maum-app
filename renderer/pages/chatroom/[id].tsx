@@ -27,7 +27,6 @@ export default function Chat() {
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };
-  console.log(messages)
   async function addMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const date = new Date();
