@@ -1,7 +1,6 @@
 import {
   collection,
   getDoc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -12,8 +11,8 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { userLocalId, loginEmail } from "../state/Atom";
-import { db } from "./firebase";
+import { userLocalId, loginEmail } from "../components/state/Atom";
+import { db } from "../components/firebase";
 
 interface Users {
   email: string;
