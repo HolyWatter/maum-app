@@ -1,4 +1,4 @@
-import { db } from "../components/firebase";
+import { db } from "../pages/firebase";
 import {
   doc,
   getDoc,
@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { loginEmail, userLocalId } from "./state/Atom";
+import { loginEmail, userLocalId } from "../state/Atom";
 import { useRecoilValue } from "recoil";
 
 interface User {

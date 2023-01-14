@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
-import { loginState, userLocalId } from "./state/Atom";
+import { loginState, userLocalId } from "../state/Atom";
 
 export default function MenuModal({setIsMenuModal}) {
   const router = useRouter();

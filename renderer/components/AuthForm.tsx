@@ -1,4 +1,4 @@
-import { UserInfo } from "../components/interface";
+import { UserInfo } from "../pages/interface";
 
 interface Props {
   setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;

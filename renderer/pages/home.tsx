@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import GroupModal from "../components/GroupModal";
 import { useRecoilValue } from "recoil";
-import { loginState } from "../components/state/Atom";
+import { loginState } from "../state/Atom";
 
 function Home() {
   const router = useRouter();

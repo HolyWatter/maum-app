@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import AuthForm from "../components/AuthForm";
-import { UserInfo } from "../components/interface";
+import { UserInfo } from "./interface";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth , db} from "../components/firebase";
+import { auth, db } from "./firebase";
 import { addDoc, collection, setDoc, doc } from "firebase/firestore";
 
 export default function signup() {
