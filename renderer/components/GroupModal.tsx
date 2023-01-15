@@ -13,16 +13,19 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { loginEmail, userLocalId } from "./state/Atom";
 import { useRecoilValue } from "recoil";
+import Alert from "./Alert";
 
 interface User {
   email: string;
   uid: string;
 }
 
-export default function GroupModal({setIsGroupModal}) {
+export default function GroupModal({ setIsGroupModal }) {
   const localId = useRecoilValue(userLocalId);
   const email = useRecoilValue(loginEmail);
   const [userList, setUserList] = useState([]);
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [isAlert, setIsAlert] = useState<boolean>(false);
   const [checkedArr, setCheckedArr] = useState<string[]>([]);
   const [inviteUserList, setInviteUserList] = useState<User[]>([
     {
@@ -62,36 +65,48 @@ export default function GroupModal({setIsGroupModal}) {
     }
   };
   const clickCreateRoom = async () => {
-    if(inviteUserList.length > 2){
+    if (inviteUserList.length > 2) {
       const combinedUid = inviteUserList
-      .map((item) => item.uid)
-      .sort()
-      .join("");
-    const response = await getDoc(doc(db, "chats", combinedUid));
-    if (!response.exists()) {
-      await setDoc(doc(db, "chats", combinedUid), { messages: [] });
-      inviteUserList.forEach(function async(item) {
-        updateDoc(doc(db, "chatRooms", item.uid), {
-          [combinedUid + ".userInfo"]: inviteUserList,
+        .map((item) => item.uid)
+        .sort()
+        .join("");
+      const response = await getDoc(doc(db, "chats", combinedUid));
+      if (!response.exists()) {
+        await setDoc(doc(db, "chats", combinedUid), { messages: [] });
+        inviteUserList.forEach(function async(item) {
+          updateDoc(doc(db, "chatRooms", item.uid), {
+            [combinedUid + ".userInfo"]: inviteUserList,
+          });
         });
-      });
-    }
-    router.push(`/chatroom/${combinedUid}`);
-    }else{
-      alert("두명 이상의 유저를 선택해주세요")
+      }
+      router.push(`/chatroom/${combinedUid}`);
+    } else {
+      setAlertMessage("두명 이상의 유저를 선택해주세요");
+      setIsAlert(true);
     }
   };
 
   const clickClose = () => {
-    setIsGroupModal(prev=> !prev)
+    setIsGroupModal((prev) => !prev);
   };
+
+  const closeAlert = () => {
+    setIsAlert((prev) => !prev);
+    if (alertMessage === "로그인 되었습니다.") {
+      router.push("/home");
+    }
+  };
+
   return (
     <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 border  rounded-sm w-[300px] min-h-[200px] space-y-2 bg-white z-10">
       <div className="flex flex-col items-center space-y-3">
         <p className="w-full py-2 text-center border-b">유저목록</p>
         {userList.map((item) =>
           item.uid !== localId ? (
-            <label key={item.uid} className="flex items-center space-x-2 w-full justify-start">
+            <label
+              key={item.uid}
+              className="flex items-center space-x-2 w-full justify-start"
+            >
               <input
                 checked={checkedArr.includes(item.uid)}
                 className="hidden"
@@ -144,9 +159,28 @@ export default function GroupModal({setIsGroupModal}) {
         )}
       </div>
       <div className="flex space-x-3 justify-center py-3 border-t">
-        <button onClick={clickCreateRoom} className="w-[80px] py-1 rounded-sm bg-origin text-white">생성하기</button>
-        <button onClick={clickClose} className="w-[80px] py-1 rounded-sm bg-gray-500 text-white">닫기</button>
+        <button
+          onClick={clickCreateRoom}
+          className="w-[80px] py-1 rounded-sm bg-origin text-white"
+        >
+          생성하기
+        </button>
+        <button
+          onClick={clickClose}
+          className="w-[80px] py-1 rounded-sm bg-gray-500 text-white"
+        >
+          닫기
+        </button>
       </div>
+      {isAlert && (
+        <div>
+          <div
+            className="absolute top-0 right-0 left-0 bottom-0 w-full h-full bg-gray-800/30"
+            onClick={closeAlert}
+          ></div>
+          <Alert messages={alertMessage} closeAlert={closeAlert} />
+        </div>
+      )}
     </div>
   );
 }

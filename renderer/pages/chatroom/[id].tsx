@@ -5,24 +5,27 @@ import { db } from "../../components/firebase";
 import { useRecoilValue } from "recoil";
 import { loginEmail, userLocalId } from "../../components/state/Atom";
 import ChatRoomList from "../../components/ChatRoomList";
+import Alert from "../../components/Alert";
 
 export default function Chat() {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState(null);
   const localId = useRecoilValue(userLocalId);
-  const email = useRecoilValue(loginEmail)
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const email = useRecoilValue(loginEmail);
   const router = useRouter();
 
   useEffect(() => {
     if (localId === "") {
-      router.push("/login");
-      alert("로그인이 필요한 서비스입니다.");
+      setAlertMessage("로그인이 필요한 서비스입니다.");
+      setIsAlert(true);
     }
     const chatPath = router.query.id.toString();
     onSnapshot(doc(db, "chats", chatPath), (snapshot) => {
       snapshot.exists() && setMessages(snapshot.data().messages);
     });
-  }, [router.query.id]);
+  }, [router.query.id, localId]);
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -46,6 +49,14 @@ export default function Chat() {
       setText("");
     } else return;
   }
+
+  const closeAlert = () => {
+    setIsAlert((prev) => !prev);
+    if (alertMessage === "로그인이 필요한 서비스입니다.") {
+      router.push("/login");
+    }
+  };
+
   return (
     <div className="flex h-full">
       <ChatRoomList />
@@ -66,16 +77,13 @@ export default function Chat() {
                     </p>
                   </div>
                 ) : (
-                  <div
-                    key={items.id}
-                    className="space-y-1"
-                  >
+                  <div key={items.id} className="space-y-1">
                     <p className="text-xs text-gray-900">{items.email}</p>
                     <div className="flex items-center justify-start space-x-3">
-                    <p className="max-w-[200px] px-3 bg-gray-500 rounded-md text-white font-light">
-                      {items.text}
-                    </p>
-                    <p className="text-[7px]">{items.created}</p>
+                      <p className="max-w-[200px] px-3 bg-gray-500 rounded-md text-white font-light">
+                        {items.text}
+                      </p>
+                      <p className="text-[7px]">{items.created}</p>
                     </div>
                   </div>
                 )
@@ -97,6 +105,15 @@ export default function Chat() {
           </form>
         </div>
       </div>
+      {isAlert && (
+        <div>
+          <div
+            className="absolute top-0 right-0 left-0 bottom-0 w-full h-full bg-gray-800/30"
+            onClick={closeAlert}
+          ></div>
+          <Alert messages={alertMessage} closeAlert={closeAlert} />
+        </div>
+      )}
     </div>
   );
 }

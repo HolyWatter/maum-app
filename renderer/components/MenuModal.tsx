@@ -1,26 +1,25 @@
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
 import { loginState, userLocalId } from "./state/Atom";
 
-export default function MenuModal({setIsMenuModal}) {
+export default function MenuModal({ setIsMenuModal }) {
   const router = useRouter();
   const setIsLogin = useSetRecoilState(loginState);
   const setUserId = useSetRecoilState(userLocalId);
 
   const clickLogout = () => {
-    setIsLogin(false);
     setUserId("");
-    localStorage.removeItem('token');
-    router.push("/home");
-    alert("정상적으로 로그아웃 되었습니다.")
-    setIsMenuModal(false)
+    setIsLogin(false);
+    localStorage.removeItem("token");
+    setIsMenuModal(false);
   };
 
-  const clickChat= () =>{
-    router.push("/chatroom")
-    setIsMenuModal(false)
-  }
-  
+  const clickChat = () => {
+    router.push("/chatroom");
+    setIsMenuModal(false);
+  };
+
   return (
     <div className="absolute py-2 px-4 right-0 bg-white border rounded-md space-y-3">
       <button className="flex items-center space-x-4" onClick={clickChat}>

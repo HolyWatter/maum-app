@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userLocalId, loginEmail } from "../components/state/Atom";
 import { db } from "../components/firebase";
+import Alert from "../components/Alert";
 
 interface Users {
   email: string;
@@ -23,6 +24,8 @@ export default function UserList() {
   const localId = useRecoilValue(userLocalId);
   const email = useRecoilValue(loginEmail);
   const [userList, setUserList] = useState<Users[]>([]);
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
   const [userModal, setUserModal] = useState<boolean>(false);
   const [clickedUserInfo, setClickedUserInfo] = useState<Users>({
     email: "",
@@ -31,8 +34,8 @@ export default function UserList() {
   const router = useRouter();
   useEffect(() => {
     if (localId === "") {
-      router.push("/login");
-      alert("로그인이 필요한 서비스입니다.");
+      setAlertMessage("로그인이 필요한 서비스입니다.")
+      setIsAlert(true)
     }
     const q = query(collection(db, "userList"), orderBy("email", "asc"));
     onSnapshot(q, (snapshot) => {
@@ -41,7 +44,7 @@ export default function UserList() {
       }));
       setUserList(user as any);
     });
-  }, []);
+  }, [localId]);
 
   const clickUser = (uid: string, email: string) => {
     setUserModal((prev) => !prev);
@@ -52,6 +55,11 @@ export default function UserList() {
   };
   const clickClose = () => {
     setUserModal((prev) => !prev);
+  };
+
+  const closeAlert = () => {
+    setIsAlert((prev) => !prev);
+    router.push("/login");
   };
 
   const clickChatWithUser = async () => {
@@ -85,7 +93,9 @@ export default function UserList() {
     <div className="flex w-full flex-col min-w-[300px]">
       <div className="py-2 w-full border-b text-center">
         <p className="text-lg">maum app에 가입된 유저목록입니다</p>
-        <p className="text-xs text-gray-400">유저를 클릭하면 대화를 시작할 수 있습니다.</p>
+        <p className="text-xs text-gray-400">
+          유저를 클릭하면 대화를 시작할 수 있습니다.
+        </p>
       </div>
       {userList.map((user) =>
         user.uid !== localId ? (
@@ -137,6 +147,15 @@ export default function UserList() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {isAlert && (
+        <div>
+          <div
+            className="absolute top-0 right-0 left-0 bottom-0 w-full h-full bg-gray-800/30"
+            onClick={closeAlert}
+          ></div>
+          <Alert messages={alertMessage} closeAlert={closeAlert} />
         </div>
       )}
     </div>
