@@ -15,9 +15,10 @@ export default function AuthForm({
   onSubmitForm,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>();
-  useEffect(()=>{
-    inputRef.current.focus()
-  },[])
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   const handleUserInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInfo({
@@ -28,7 +29,7 @@ export default function AuthForm({
   return (
     <form onSubmit={onSubmitForm} className="flex flex-col space-y-5">
       <input
-      ref={inputRef}
+        ref={inputRef}
         className="w-96 h-10 pl-3 border border-grey rounded-md focus:outline-origin"
         placeholder="이메일을 입력해주세요."
         onChange={handleUserInfo}
@@ -44,7 +45,9 @@ export default function AuthForm({
         name="password"
         value={userInfo.password}
       />
-      <button className="w-96 h-10 rounded-md bg-origin text-white">{buttonText}</button>
+      <button className="w-96 h-10 rounded-md bg-origin text-white">
+        {buttonText}
+      </button>
     </form>
   );
 }

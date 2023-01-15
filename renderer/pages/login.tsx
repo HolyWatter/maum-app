@@ -1,26 +1,24 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import AuthForm from "../components/AuthForm";
 import { auth } from "../components/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserInfo } from "../components/interface";
 import { loginEmail, loginState, userLocalId } from "../components/state/Atom";
 import { useSetRecoilState } from "recoil";
+import Alert from "../components/Alert";
 
 export default function login() {
   const setLoginStatus = useSetRecoilState(loginState);
   const setUserLocalId = useSetRecoilState(userLocalId);
-  const setLoginEmail = useSetRecoilState(loginEmail)
+  const setLoginEmail = useSetRecoilState(loginEmail);
   const [userInfo, setUserInfo] = useState<UserInfo>({
     email: "",
     password: "",
   });
-
+  const [isAlert, setIsAlert] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
   const router = useRouter();
-
-  const toMain = () => {
-    router.push("/home");
-  };
 
   const toSignUp = () => {
     router.push("/signup");
@@ -36,14 +34,21 @@ export default function login() {
       );
       localStorage.setItem("token", (response.user as any).accessToken);
       setLoginStatus(true);
-      setUserLocalId(response.user.uid)
-      setLoginEmail(response.user.email)
-      router.push("/home");
-      alert("로그인 되었습니다.");
+      setUserLocalId(response.user.uid);
+      setLoginEmail(response.user.email);
+      setAlertMessage("로그인 되었습니다.");
+      setIsAlert(true);
     } catch (error) {
-      alert(ERROR_MESSAGE[error.code]);
+      setAlertMessage(ERROR_MESSAGE[error.code]);
+      setIsAlert(true);
     }
   }
+  const closeAlert = () => {
+    setIsAlert((prev) => !prev);
+    if(alertMessage === "로그인 되었습니다."){
+      router.push("/home")
+    }
+  };
   return (
     <div className="flex flex-col items-center space-y-10">
       <div className="mt-[100px] font-bold text-origin text-[100px]">Maum</div>
@@ -60,6 +65,15 @@ export default function login() {
           회원가입
         </button>
       </div>
+      {isAlert && (
+        <div>
+          <div
+            className="absolute top-0 right-0 left-0 bottom-0 w-full h-full bg-gray-800/30"
+            onClick={closeAlert}
+          ></div>
+          <Alert messages={alertMessage} closeAlert={closeAlert} />
+        </div>
+      )}
     </div>
   );
 }
