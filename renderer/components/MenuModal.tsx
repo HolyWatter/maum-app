@@ -15,10 +15,15 @@ export default function MenuModal({setIsMenuModal}) {
     alert("정상적으로 로그아웃 되었습니다.")
     setIsMenuModal(false)
   };
+
+  const clickChat= () =>{
+    router.push("/chatroom")
+    setIsMenuModal(false)
+  }
   
   return (
-    <div className="absolute w-[120px] p-2 right-0 bg-white border rounded-md space-y-3">
-      <button className="flex items-center space-x-4">
+    <div className="absolute py-2 px-4 right-0 bg-white border rounded-md space-y-3">
+      <button className="flex items-center space-x-4" onClick={clickChat}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

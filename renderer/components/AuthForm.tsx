@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { UserInfo } from "../components/interface";
 
 interface Props {
@@ -13,6 +14,10 @@ export default function AuthForm({
   buttonText,
   onSubmitForm,
 }: Props) {
+  const inputRef = useRef<HTMLInputElement>();
+  useEffect(()=>{
+    inputRef.current.focus()
+  },[])
   const handleUserInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInfo({
@@ -23,6 +28,7 @@ export default function AuthForm({
   return (
     <form onSubmit={onSubmitForm} className="flex flex-col space-y-5">
       <input
+      ref={inputRef}
         className="w-96 h-10 pl-3 border border-grey rounded-md focus:outline-origin"
         placeholder="이메일을 입력해주세요."
         onChange={handleUserInfo}

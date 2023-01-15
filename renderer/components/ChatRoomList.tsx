@@ -31,7 +31,7 @@ export default function ChatRoomList() {
         {chatRoomList.map((chat) => (
           <button
             key={chat[0]}
-            className="flex items-center space-x-3 border-b py-3"
+            className="flex items-center space-x-3 w-full border-b py-3"
             onClick={() => {
               clickRoomList(chat[0]);
             }}

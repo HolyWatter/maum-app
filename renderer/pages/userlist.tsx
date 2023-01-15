@@ -82,8 +82,8 @@ export default function UserList() {
   };
 
   return (
-    <div className="flex flex-col min-w-[300px]">
-      <div className="py-2 border-b text-center">
+    <div className="flex w-full flex-col min-w-[300px]">
+      <div className="py-2 w-full border-b text-center">
         <p className="text-lg">maum app에 가입된 유저목록입니다</p>
         <p className="text-xs text-gray-400">유저를 클릭하면 대화를 시작할 수 있습니다.</p>
       </div>
@@ -91,7 +91,7 @@ export default function UserList() {
         user.uid !== localId ? (
           <button
             key={user.uid}
-            className="flex items-center p-3 border-b space-x-3"
+            className="flex items-center w-full p-3 border-b space-x-3"
             onClick={() => {
               clickUser(user.uid, user.email);
             }}
@@ -125,7 +125,7 @@ export default function UserList() {
             <div className="space-x-4">
               <button
                 onClick={clickChatWithUser}
-                className="w-[100px] h-[40px] bg-origin text-white rounded-md"
+                className="px-3 h-[40px] bg-origin text-white rounded-md"
               >
                 1:1로 채팅하기
               </button>

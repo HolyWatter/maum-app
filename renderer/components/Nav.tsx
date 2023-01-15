@@ -19,6 +19,7 @@ export default function Nav() {
   const clickSignUp = () => {
     router.push("/signup");
   };
+
   const clickMenu = () => {
     setIsMenuModal((prev) => !prev);
   };

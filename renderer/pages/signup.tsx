@@ -11,17 +11,12 @@ export default function signup() {
     email: "",
     password: "",
   });
-
   const router = useRouter();
-
-  const toMain = () => {
-    router.push("/home");
-  };
-
+  
   const toLogin = () => {
     router.push("/login");
   };
-
+  
   async function submitSignUpForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
