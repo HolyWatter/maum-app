@@ -32,6 +32,7 @@ export default function UserList() {
     uid: "",
   });
   const router = useRouter();
+
   useEffect(() => {
     if (localId === "") {
       setAlertMessage("로그인이 필요한 서비스입니다.")

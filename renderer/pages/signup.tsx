@@ -36,7 +36,6 @@ export default function signup() {
       await setDoc(doc(db, "chatRooms", response.user.uid), {});
       setAlertMessage("회원가입되었습니다.");
       setIsAlert(true);
-      router.push("/login");
     } catch (error) {
       setAlertMessage(ERROR_MESSAGE[error.code]);
       setIsAlert(true);
@@ -44,6 +43,9 @@ export default function signup() {
   }
   const closeAlert = () => {
     setIsAlert((prev) => !prev);
+    if(alertMessage === "회원가입되었습니다."){
+      router.push("/login");
+    }
   };
 
   return (
