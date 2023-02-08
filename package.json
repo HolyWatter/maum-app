@@ -6,14 +6,15 @@
   "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
   "main": "app/background.js",
   "scripts": {
-    "dev": "nextron",
+    "dev": "next dev",
     "build": "nextron build",
-    "build:all" : "nextron build --all",
-    "build:win64" : "nextron build --win --x64",
+    "build:all": "nextron build --all",
+    "build:win64": "nextron build --win --x64",
     "build:mac": "nextron build --mac --x64",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "dotenv-webpack": "^8.0.1",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
     "firebase": "^9.15.0",

@@ -2,7 +2,7 @@ import { getDoc, doc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { db } from "../components/firebase";
+import { db } from "./firebase";
 import { userLocalId } from "./state/Atom";
 
 export default function ChatRoomList() {

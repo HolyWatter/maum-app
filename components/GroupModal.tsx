@@ -1,4 +1,4 @@
-import { db } from "../components/firebase";
+import { db } from "./firebase";
 import {
   doc,
   getDoc,
@@ -93,7 +93,7 @@ export default function GroupModal({ setIsGroupModal }) {
   const closeAlert = () => {
     setIsAlert((prev) => !prev);
     if (alertMessage === "로그인 되었습니다.") {
-      router.push("/home");
+      router.push("/");
     }
   };
 

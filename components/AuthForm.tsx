@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { UserInfo } from "../components/interface";
+import { UserInfo } from "./interface";
 
 interface Props {
   setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;

@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userLocalId, loginEmail } from "../components/state/Atom";
-import { db } from "../components/firebase";
+import {db} from "../components/firebase"
 import Alert from "../components/Alert";
 
 interface Users {

@@ -10,7 +10,7 @@ export default function Nav() {
   const router = useRouter();
 
   const clickLogo = ()=>{
-    router.push("/home")
+    router.push("/")
   }
 
   const clickLogin = () => {

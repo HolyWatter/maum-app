@@ -24,5 +24,10 @@
     "renderer/next.config.js",
     "app",
     "dist"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
   ]
 }
